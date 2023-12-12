@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "hexlet-code"
+version = "0.1.0"
+description = "The program detects differences in files."
+authors = ["Kuragin Ivan <curagin.vanya@yandex.ru>"]
+readme = "README.md"
+packages = [
+    { include = "difference_calculation" },
+]
+
+[tool.poetry.dependencies]
+python = "3.10"
+
+[tool.poetry.scripts]
+gendiff = "gendiff.scripts.gendiff:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
