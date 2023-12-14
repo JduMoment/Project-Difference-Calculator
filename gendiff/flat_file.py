@@ -1,0 +1,24 @@
+import json
+
+FIRST_FILE = json.load(open('./file1.json'))
+SECOND_FILE = json.load(open('./file2.json'))
+
+def generate_diff(first_file, second_file):
+    keys_1 = list(first_file.keys())
+    keys_list = list(first_file.keys()) + [key for key in second_file.keys() 
+                                           if key not in keys_1]
+    result = ''
+    for key in sorted(keys_list):
+        if first_file.get(key) == second_file.get(key):
+            result += f"   {key}: {first_file.get(key)}\n"
+        elif key in first_file and key not in second_file:
+            result += f"  -{key}: {first_file.get(key)}\n"
+        elif key in second_file and key not in first_file:
+            result += f"  +{key}: {second_file.get(key)}\n"
+        else:
+            result += f"  -{key}: {first_file.get(key)}\n"
+            result += f"  +{key}: {second_file.get(key)}\n"
+    return '{\n' + result.lower() + '}'
+
+
+print(generate_diff(FIRST_FILE, SECOND_FILE))
