@@ -8,3 +8,5 @@ package-install: #Устанавливаем пакет из ОС
 	python3 -m pip install --user dist/*.whl
 lint: #Запускаем проверку линтером
 	poetry run flake8 difference_calculation
+gendiff:
+	poetry run python -m gendiff.scripts.gendiff
