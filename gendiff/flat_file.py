@@ -18,4 +18,4 @@ def generate_diff(path_first, path_second):
             result += f"  -{key}: {first_file.get(key)}\n"
             result += f"  +{key}: {second_file.get(key)}\n"
     result = '{\n' + result.lower() + '}'
-    return print(result)
+    return result
