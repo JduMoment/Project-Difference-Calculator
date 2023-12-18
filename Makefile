@@ -7,6 +7,6 @@ publish: #Публикуем пакет в PyPI, не добавляем в ка
 package-install: #Устанавливаем пакет из ОС
 	python3 -m pip install --user dist/*.whl
 lint: #Запускаем проверку линтером
-	poetry run flake8 difference_calculation
+	poetry run flake8 gendiff
 gendiff:
 	poetry run python -m gendiff.scripts.gendiff

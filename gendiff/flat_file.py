@@ -1,10 +1,11 @@
 import json
 
+
 def generate_diff(path_first, path_second):
     first_file = json.load(open(path_first))
     second_file = json.load(open(path_second))
     keys_1 = list(first_file.keys())
-    keys_list = list(first_file.keys()) + [key for key in second_file.keys() 
+    keys_list = list(first_file.keys()) + [key for key in second_file.keys()
                                            if key not in keys_1]
     result = ''
     for key in sorted(keys_list):
