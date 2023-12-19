@@ -13,4 +13,4 @@ gendiff: #Запускаем скрипт сравнения
 check: #Тестируем
 	poetry run pytest
 test-coverage: #Проверяем покрытие
-	poetry run pytest --cov
+	poetry run pytest --cov=gendiff --cov-report xml gendiff/tests
