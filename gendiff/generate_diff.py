@@ -1,14 +1,9 @@
-import json
-
-
-def generate_diff(path_first, path_second):
-    first_file = json.load(open(path_first))
-    second_file = json.load(open(path_second))
-    if len(first_file) == 0 and len(second_file) == 0:
-        return ''
-    keys_1 = list(first_file.keys())
+def generate_diff(first_file, second_file):
+    if first_file == None and second_file == None:
+        return
+    keys = list(first_file.keys())
     keys_list = list(first_file.keys()) + [key for key in second_file.keys()
-                                           if key not in keys_1]
+                                        if key not in keys]
     result = ''
     for key in sorted(keys_list):
         if first_file.get(key) == second_file.get(key):

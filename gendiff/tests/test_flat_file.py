@@ -1,23 +1,48 @@
-from gendiff.flat_file import generate_diff
+from gendiff.generate_diff import generate_diff
+from gendiff.file_to_dict import transform_to_dict
 
+
+def read_file(path_to_expected_file):
+    file = open(path_to_expected_file, 'r')
+    return file.read()
 
 def test_flat_file():
-    with open('gendiff/tests/fixtures/test_expected_flat.txt', 'r') as right:
-        file1 = 'gendiff/tests/fixtures/file1_for_test.json'
-        file2 = 'gendiff/tests/fixtures//file2_for_test.json'
-        assert generate_diff(file1, file2) == right.read()
-
+    f1_json, f2_json = transform_to_dict(
+        'gendiff/tests/fixtures/file1_for_test.json',
+        'gendiff/tests/fixtures/file2_for_test.json'
+        )
+    f1_yml, f2_yml = transform_to_dict(
+        'gendiff/tests/fixtures/file1_for_test.yml',
+        'gendiff/tests/fixtures/file2_for_test.yml'
+        )
+    verif_file = read_file('gendiff/tests/fixtures/test_expected_flat.txt')
+    assert generate_diff(f1_json, f2_json) == verif_file
+    assert generate_diff(f1_yml, f2_yml) == verif_file
 
 def test_empty_file():
-    with open('gendiff/tests/fixtures/test_expected_empty_file.txt', 'r') as right:
-        file1 = 'gendiff/tests/fixtures/file2_for_test.json'
-        file2 = 'gendiff/tests/fixtures/file3_for_test.json'
-        assert generate_diff(file2, file1) == right.read()
+    f1_json, f2_json = transform_to_dict(
+        'gendiff/tests/fixtures/file2_for_test.json',
+        'gendiff/tests/fixtures//file3_for_test.json'
+        )
+    f1_yml, f2_yml = transform_to_dict(
+        'gendiff/tests/fixtures/file2_for_test.yml',
+        'gendiff/tests/fixtures/file3_for_test.yml'
+        )
+    verif_file = read_file('gendiff/tests/fixtures/test_expected_empty_file.txt')
+    assert generate_diff(f2_json, f1_json) == verif_file
+    assert generate_diff(f2_yml, f1_yml) == verif_file
 
 
 def test_empty_files():
-    with open('gendiff/tests/fixtures/text_expected_empty_files.txt', 'r') as right:
-        file1 = 'gendiff/tests/fixtures/file3_for_test.json'
-        file2 = 'gendiff/tests/fixtures/file3_for_test.json'
-        assert generate_diff(file1, file2) == right.read()
+    f1_json, f2_json = transform_to_dict(
+        'gendiff/tests/fixtures/file1_for_test.json',
+        'gendiff/tests/fixtures//file2_for_test.json'
+        )
+    f1_yml, f2_yml = transform_to_dict(
+        'gendiff/tests/fixtures/file1_for_test.yml',
+        'gendiff/tests/fixtures/file2_for_test.yml'
+        )
+    verif_file = read_file('gendiff/tests/fixtures/text_expected_empty_files.txt')
+    assert generate_diff(f1_json, f2_json) == verif_file
+    assert generate_diff(f1_yml, f2_yml) == verif_file
 
