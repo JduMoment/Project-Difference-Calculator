@@ -1,9 +1,7 @@
 def generate_diff(first_file, second_file):
-    if first_file == None and second_file == None:
-        return
-    keys = list(first_file.keys())
-    keys_list = list(first_file.keys()) + [key for key in second_file.keys()
-                                        if key not in keys]
+    if first_file is None and second_file is None:
+        return ''
+    keys_list = set(list(first_file.keys()) + list(second_file.keys()))
     result = ''
     for key in sorted(keys_list):
         if first_file.get(key) == second_file.get(key):
