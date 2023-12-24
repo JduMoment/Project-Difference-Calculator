@@ -84,19 +84,27 @@ def search_keys(dict1, all_keys = []):
 			return search_keys(v)
 	return all_keys
 
-def gendiff(dict1, dict2, result = ''):
-	for (k1, v1), (k2, v2) in zip_longest(sorted(dict1.items()), sorted(dict2.items())):
-		all_keys = set(list(dict1.keys()) + list(dict2.keys()))
-		for key in sorted(all_keys):
-			print(result)
-			if dict1.get(key) == dict2.get(key):
-				result += f"** {key}: {dict1.get(key)}"
-			elif key in dict1 and key not in dict2:
-				result += f"** -{key}: {dict1.get(key)}"
-			elif key not in dict1 and key in dict2:
-				result += f"** +{key}: {dict2.get(key)}"
-			else:
-				gendiff(v1, v2)
-	return f"Мы вернули результат {result}"
+
+def gendiff(dict1, dict2, depth = 0, result = []):
+    all_keys = sorted(set(list(dict1.keys()) + list(dict2.keys())))
+    for key in all_keys:
+        child_dict_1 = dict1.get(key, 'no such key')
+        child_dict_2 = dict2.get(key, 'no such key')
+        if key in dict1 and key in dict2:
+            if child_dict_1 == child_dict_2:
+                result.append(f"{   '  '*depth}  {key}: {child_dict_1}\n")
+            elif isinstance(child_dict_1, dict) and isinstance(child_dict_2, dict):
+                result.append(' ' + key + ': {\n')
+                gendiff(child_dict_1, child_dict_2, depth + 1)
+            else:
+                result.append(f"{   '  '*depth}- {key}: {child_dict_1}\n")
+                result.append(f"{   '  '*depth}+ {key}: {child_dict_2}\n")
+        elif key in dict1 and key not in dict2:
+            result.append(f"{   '  '*depth}- {key}: {child_dict_2}\n")
+        elif key not in dict1 and key in dict2:
+             result.append(f"{   '  '*depth}+ {key}: {child_dict_2}\n")
+    result = ''.join(result)
+    result = '{\n' + result.lower() + '}'
+    return result
 
 print(gendiff(f1, f2))
