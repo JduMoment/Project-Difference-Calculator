@@ -5,13 +5,19 @@ with open('gendiff/tests/fixtures/file1.json', 'r') as file:
 with open('gendiff/tests/fixtures/file2.json', 'r') as file:
     file2 = load(file)
 
-def make_dict(key, new_value, old_value, changes):
-    return{
-        'key': key,
-        'old_value': old_value,
-        'new_value': new_value,
-        'diff': changes,
-    }
+def make_dict(key, value, changes, value_2 = None):
+    if value_2 is not None:
+        return dict(
+            key=key,
+            old_value=value,
+            new_value=value_2,
+            changes=changes,
+        )
+    return dict(
+        key=key,
+        value=value,
+        changes=changes,
+    )
 
 IN_FIRST = 'IN_FIRST'
 SAME = 'SAME'
@@ -27,19 +33,16 @@ def construct_diff(dict_1: dict, dict_2: dict) -> list:
         value_dict_1 = dict_1.get(key, EMPTY)
         value_dict_2 = dict_2.get(key, EMPTY)
         if key not in dict_2:
-            diff_list.append(make_dict(key, value_dict_1,
-                                       value_dict_2, IN_FIRST))
+            diff_list.append(make_dict(key, value_dict_1, IN_FIRST))
         elif key not in dict_1:
-            diff_list.append(make_dict(key, value_dict_1,
-                                       value_dict_2, IN_SECOND))
+            diff_list.append(make_dict(key, value_dict_2, IN_SECOND))
         elif value_dict_1 == value_dict_2:
-            diff_list.append(make_dict(key, value_dict_1,
-                                       value_dict_2, SAME))
+            diff_list.append(make_dict(key, value_dict_1, SAME))
         elif isinstance(value_dict_1, dict) and isinstance(value_dict_2, dict):
             construct = construct_diff(value_dict_1, value_dict_2)
-            diff_list.append(make_dict(key, value_dict_1, value_dict_1, construct))
+            diff_list.append(make_dict(key, construct, CHANGED))
         else:
-            diff_list.append(make_dict(key, value_dict_1, value_dict_2, CHANGED))
+            diff_list.append(make_dict(key, value_dict_1, CHANGED, value_dict_2))
     return diff_list
 
 from pprint import pp
