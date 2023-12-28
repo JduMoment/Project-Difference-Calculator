@@ -1,97 +1,85 @@
 diff = [{'key': 'common',
-  'old_value': {'setting1': 'Value 1',
-                'setting2': 200,
-                'setting3': True,
-                'setting6': {'key': 'value', 'doge': {'wow': ''}}},
-  'new_value': {'setting1': 'Value 1',
-                'setting2': 200,
-                'setting3': True,
-                'setting6': {'key': 'value', 'doge': {'wow': ''}}},
-  'diff': [{'key': 'follow',
-            'old_value': False,
-            'new_value': 'EMPTY',
-            'diff': 'IN_SECOND'},
-           {'key': 'setting1',
-            'old_value': 'Value 1',
-            'new_value': 'Value 1',
-            'diff': 'SAME'},
-           {'key': 'setting2',
-            'old_value': 'EMPTY',
-            'new_value': 200,
-            'diff': 'IN_FIRST'},
-           {'key': 'setting3',
-            'old_value': None,
-            'new_value': True,
-            'diff': 'CHANGED'},
-           {'key': 'setting4',
-            'old_value': 'blah blah',
-            'new_value': 'EMPTY',
-            'diff': 'IN_SECOND'},
-           {'key': 'setting5',
-            'old_value': {'key5': 'value5'},
-            'new_value': 'EMPTY',
-            'diff': 'IN_SECOND'},
-           {'key': 'setting6',
-            'old_value': {'key': 'value', 'doge': {'wow': ''}},
-            'new_value': {'key': 'value', 'doge': {'wow': ''}},
-            'diff': [{'key': 'doge',
-                      'old_value': {'wow': ''},
-                      'new_value': {'wow': ''},
-                      'diff': [{'key': 'wow',
-                                'old_value': 'so much',
-                                'new_value': '',
-                                'diff': 'CHANGED'}]},
-                     {'key': 'key',
-                      'old_value': 'value',
-                      'new_value': 'value',
-                      'diff': 'SAME'},
-                     {'key': 'ops',
-                      'old_value': 'vops',
-                      'new_value': 'EMPTY',
-                      'diff': 'IN_SECOND'}]}]},
- {'key': 'group1',
-  'old_value': {'baz': 'bas', 'foo': 'bar', 'nest': {'key': 'value'}},
-  'new_value': {'baz': 'bas', 'foo': 'bar', 'nest': {'key': 'value'}},
-  'diff': [{'key': 'baz',
-            'old_value': 'bars',
-            'new_value': 'bas',
-            'diff': 'CHANGED'},
-           {'key': 'foo',
-            'old_value': 'bar',
-            'new_value': 'bar',
-            'diff': 'SAME'},
-           {'key': 'nest',
-            'old_value': 'str',
-            'new_value': {'key': 'value'},
-            'diff': 'CHANGED'}]},
- {'key': 'group2',
-  'old_value': 'EMPTY',
-  'new_value': {'abc': 12345, 'deep': {'id': 45}},
-  'diff': 'IN_FIRST'},
- {'key': 'group3',
-  'old_value': {'deep': {'id': {'number': 45}}, 'fee': 100500},
-  'new_value': 'EMPTY',
-  'diff': 'IN_SECOND'}]
+        'value': [{'key': 'follow', 'value': False, 'changes': 'IN_SECOND'},
+                    {'key': 'setting1', 'value': 'Value 1', 'changes': 'SAME'},
+                    {'key': 'setting2', 'value': 200, 'changes': 'IN_FIRST'},
+                    {'key': 'setting3', 'value': True, 'changes': 'CHANGED'},
+                    {'key': 'setting4', 'value': 'blah blah', 'changes': 'IN_SECOND'},
+                    {'key': 'setting5',
+                    'value': {'key5': 'value5'},
+                    'changes': 'IN_SECOND'},
+                    {'key': 'setting6',
+                    'value': [{'key': 'doge',
+                                'value': [{'key': 'wow',
+                                        'old_value': '',
+                                        'new_value': 'so much',
+                                        'changes': 'CHANGED'}],
+                                'changes': 'CHANGED'},
+                            {'key': 'key', 'value': 'value', 'changes': 'SAME'},
+                            {'key': 'ops', 'value': 'vops', 'changes': 'IN_SECOND'}],
+                    'changes': 'CHANGED'}],
+        'changes': 'CHANGED'},
+        {'key': 'group1',
+        'value': [{'key': 'baz',
+                    'old_value': 'bas',
+                    'new_value': 'bars',
+                    'changes': 'CHANGED'},
+                    {'key': 'foo', 'value': 'bar', 'changes': 'SAME'},
+                    {'key': 'nest',
+                    'old_value': {'key': 'value'},
+                    'new_value': 'str',
+                    'changes': 'CHANGED'}],
+        'changes': 'CHANGED'},
+        {'key': 'group2',
+        'value': {'abc': 12345, 'deep': {'id': 45}},
+        'changes': 'IN_FIRST'},
+        {'key': 'group3',
+        'value': {'deep': {'id': {'number': 45}}, 'fee': 100500},
+        'changes': 'IN_SECOND'}]
 
 from pprint import pprint
 
 
-def generate_diff(diff_list, depth = 1):
-    start_line = '{ \n'
-    line = []
+def generate_diff(diff_list, depth = 1, line = []):
     for every_dict in diff_list:
-        pprint(f"Сейчас берём ключ {every_dict}", sort_dicts=False)
-        print(f"Вот такой у него ключ {}")
-        if every_dict['diff'] == 'IN_FIRST':
-            line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}" + ' {')
-        elif every_dict['diff'] == 'IN_SECOND':
-            line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}" + ' {')
-        elif every_dict['diff'] == 'SAME':
-            line.append(f"{' ' * (depth * 4 - 2)}  {every_dict['key']}" + ' {')
-        elif isinstance(every_dict['diff'], dict):
-            print('Сработало!')
-            line.append(f"{' ' * (depth * 4 - 2)}  {every_dict['key']}" + ' {')
-            generate_diff(every_dict['diff'], depth + 1)
-    print(line)
+        print(every_dict)
+        if every_dict['changes'] == 'IN_FIRST':
+            if isinstance(every_dict['value'], dict):
+                line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: ")
+                generate_diff(every_dict['value'], depth + 1)
+            else:
+                line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: {every_dict['value']}")
+        elif every_dict['changes'] == 'IN_SECOND':
+            if isinstance(every_dict['value'], dict):
+                line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}: ")
+                generate_diff(every_dict['value'], depth + 1)
+            else:
+                line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}: {every_dict['value']}")
+        elif every_dict['changes'] == 'SAME':
+            line.append(f"{' ' * (depth * 4 - 2)}  {every_dict['key']}: {every_dict['value']}")
+        elif every_dict['changes'] == 'CHANGED':
+            if 'old_value' in every_dict:
+                line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: {every_dict['old_value']}")
+                line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}: {every_dict['new_value']}")
+            elif isinstance(every_dict['value'], list):
+                line.append(f"{' ' * (depth * 4 - 2)}  {every_dict['key']}" + ' {')
+                generate_diff(every_dict['value'], depth + 1)
+    return '\n'.join(line)
 
-generate_diff(diff)
+pprint(generate_diff(diff), sort_dicts=False)
+
+# super_line = {'deep': {'id': {'number': 45}}, 'fee': 100500}
+
+# def format_line(line, depth = 2):
+#     split_line = list(str(line))
+#     new_line = []
+#     for char in split_line:
+#         new_line.append(char)
+#         if char == '{':
+#             new_line.append('\n')
+#             new_line.append(' '*(depth * 4 - 2))
+#         elif char == '}':
+#             new_line.insert(-1, '\n')
+#     return ''.join(new_line)
+
+
+# print(format_line(super_line))
