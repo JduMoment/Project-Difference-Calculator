@@ -77,10 +77,10 @@ def generate_diff(diff_list, depth = 1, line = ['{']):
     elif isinstance(diff_list, dict):
         for k, v in diff_list.items():
             if isinstance(v, dict):
-                line.append(f"{' ' * (depth * 4 - 2)} {k}: " + '{')
+                line.append(f" {' ' * (depth * 4 - 2)} {k}: " + '{')
                 generate_diff(v, depth + 1)
             else:
-                line.append(f"{' ' * (depth * 4 - 2)} {k}: {v}")
+                line.append(f" {' ' * (depth * 4 - 2)} {k}: {v}")
     line.append(f"{' ' * (depth * 4 - 4)}" + '}')
     line = '\n'.join(line)
     return line
