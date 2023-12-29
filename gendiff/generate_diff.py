@@ -39,18 +39,18 @@ diff = [{'key': 'common',
 from pprint import pprint
 
 
-def generate_diff(diff_list, depth = 1, line = []):
+def generate_diff(diff_list, depth = 1, line = ['{']):
     if isinstance(diff_list, list):
         for every_dict in diff_list:
             if every_dict['changes'] == 'IN_FIRST':
                 if isinstance(every_dict['value'], dict):
-                    line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: ")
+                    line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: " + '{')
                     generate_diff(every_dict['value'], depth + 1)
                 else:
                     line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: {every_dict['value']}")
             elif every_dict['changes'] == 'IN_SECOND':
                 if isinstance(every_dict['value'], dict):
-                    line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}: ")
+                    line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}: " + '{')
                     generate_diff(every_dict['value'], depth + 1)
                 else:
                     line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}: {every_dict['value']}")
@@ -62,13 +62,14 @@ def generate_diff(diff_list, depth = 1, line = []):
             elif every_dict['changes'] == 'CHANGED':
                 if 'old_value' in every_dict:
                     if isinstance(every_dict['old_value'], dict):
-                        line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['old_value']}: ")
+                        line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: " + '{')
                         generate_diff(every_dict['old_value'], depth + 1)
-                    elif isinstance(every_dict['new_value'], dict):
-                        line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['new_value']}: ")
-                        generate_diff(every_dict['new_value'], depth + 1)
                     else:
                         line.append(f"{' ' * (depth * 4 - 2)}- {every_dict['key']}: {every_dict['old_value']}")
+                    if isinstance(every_dict['new_value'], dict):
+                        line.append(f"{' ' * (depth * 4 - 2)}  {every_dict['key']}: " + '{')
+                        generate_diff(every_dict['new_value'], depth + 1)
+                    else:
                         line.append(f"{' ' * (depth * 4 - 2)}+ {every_dict['key']}: {every_dict['new_value']}")
                 elif isinstance(every_dict['value'], list):
                     line.append(f"{' ' * (depth * 4 - 2)}  {every_dict['key']}" + ' {')
@@ -76,10 +77,11 @@ def generate_diff(diff_list, depth = 1, line = []):
     elif isinstance(diff_list, dict):
         for k, v in diff_list.items():
             if isinstance(v, dict):
-                line.append(f"{' ' * (depth * 4 - 2)}+ {k}")
+                line.append(f"{' ' * (depth * 4 - 2)} {k}: " + '{')
                 generate_diff(v, depth + 1)
             else:
-                line.append(f"{' ' * (depth * 4 - 2)}+ {k}: {v}")
+                line.append(f"{' ' * (depth * 4 - 2)} {k}: {v}")
+    line.append(f"{' ' * (depth * 4 - 4)}" + '}')
     line = '\n'.join(line)
     return line
 

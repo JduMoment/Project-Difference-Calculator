@@ -31,7 +31,9 @@ def construct_diff(dict_1: dict, dict_2: dict) -> list:
     all_keys = sorted(set(dict_1.keys()) | set(dict_2.keys()))
     for key in all_keys:
         value_dict_1 = dict_1.get(key, EMPTY)
+        print(f"One dict {value_dict_1}")
         value_dict_2 = dict_2.get(key, EMPTY)
+        print(f"TWo dict {value_dict_2}")
         if key not in dict_2:
             diff_list.append(make_dict(key, value_dict_1, IN_FIRST))
         elif key not in dict_1:
@@ -47,4 +49,4 @@ def construct_diff(dict_1: dict, dict_2: dict) -> list:
 
 from pprint import pp
 
-pp(construct_diff(file1, file2), sort_dicts=False)
+construct_diff(file1, file2)
