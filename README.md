@@ -4,3 +4,5 @@
 [![Python CI](https://github.com/JduMoment/python-project-50/actions/workflows/boilerplate.yml/badge.svg)](https://github.com/JduMoment/python-project-50/actions/workflows/boilerplate.yml)
 
 Example of the program: https://asciinema.org/a/pmLaCZdJxbodguCpasCYvWSh7
+With nested files: https://asciinema.org/a/3yP6dKesWNESujl2UnyW1qlW5
+
