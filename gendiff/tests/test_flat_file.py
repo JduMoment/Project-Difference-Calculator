@@ -1,4 +1,4 @@
-from gendiff.generate_diff import generate_diff
+from gendiff.generate_stylish_lines import generate_diff
 from gendiff.file_to_dict import transform_to_dict
 
 

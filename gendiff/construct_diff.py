@@ -1,9 +1,5 @@
 from json import load
 
-with open('gendiff/tests/fixtures/file1.json', 'r') as file:
-    file1 = load(file)
-with open('gendiff/tests/fixtures/file2.json', 'r') as file:
-    file2 = load(file)
 
 def make_dict(key, value, changes, value_2 = None):
     if value_2 is not None:
@@ -25,7 +21,6 @@ IN_SECOND = 'IN_SECOND'
 CHANGED = 'CHANGED'
 EMPTY = 'EMPTY'
 
-
 def construct_diff(dict_1: dict, dict_2: dict) -> list:
     diff_list = []
     all_keys = sorted(set(dict_1.keys()) | set(dict_2.keys()))
@@ -46,7 +41,3 @@ def construct_diff(dict_1: dict, dict_2: dict) -> list:
         else:
             diff_list.append(make_dict(key, value_dict_1, CHANGED, value_dict_2))
     return diff_list
-
-from pprint import pp
-
-construct_diff(file1, file2)
