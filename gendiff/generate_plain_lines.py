@@ -8,14 +8,15 @@ def processing_value(value):
     else:
         return f"'{value}'"
 
-def generate_plain_lines(diff_list, parent = '', lines = []):
+def generate_plain_lines(diff_list, parent = ''):
+    lines = []
     for every_dict in diff_list:
         key = every_dict['key']
         value = every_dict.get('value')
         changes = every_dict['changes']
         if changes == 'CHANGED':
             if isinstance(value, list):
-                generate_plain_lines(value, parent + f"{key}.")
+                result = generate_plain_lines(value, parent + f"{key}.")
             else:
                 old_value = processing_value(every_dict['old_value'])
                 new_value = processing_value(every_dict['new_value'])
@@ -30,4 +31,4 @@ def generate_plain_lines(diff_list, parent = '', lines = []):
         elif changes == 'IN_FIRST':
             value = processing_value(value)
             lines.append(f"Property '{parent}{key}' was removed")
-    return '\n'.join(lines)
+    return lines
