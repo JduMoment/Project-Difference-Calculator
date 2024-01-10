@@ -5,4 +5,5 @@
 
 Example of the program: https://asciinema.org/a/pmLaCZdJxbodguCpasCYvWSh7
 With nested files: https://asciinema.org/a/3yP6dKesWNESujl2UnyW1qlW5
+Plain style: https://asciinema.org/a/GonMpWBwIjs7wbDqPRvybHlc9
 
