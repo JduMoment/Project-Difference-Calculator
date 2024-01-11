@@ -18,9 +18,10 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
+            "env": { "PYTHONPATH": "${workspaceRoot}"},
             "args": [
                 "/home/kuraginivan/python-project-50/gendiff/tests/fixtures/file4_for_test.json",
-                "/home/kuraginivan/python-project-50/gendiff/tests/fixtures/file5_for_test.json"
+                "/home/kuraginivan/python-project-50/gendiff/tests/fixtures/file5_for_test.json",
             ]
         }
     ]

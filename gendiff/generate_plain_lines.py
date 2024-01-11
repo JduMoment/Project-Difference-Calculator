@@ -17,6 +17,7 @@ def generate_plain_lines(diff_list, parent = ''):
         if changes == 'CHANGED':
             if isinstance(value, list):
                 result = generate_plain_lines(value, parent + f"{key}.")
+                lines.append(result)
             else:
                 old_value = processing_value(every_dict['old_value'])
                 new_value = processing_value(every_dict['new_value'])
@@ -31,4 +32,4 @@ def generate_plain_lines(diff_list, parent = ''):
         elif changes == 'IN_FIRST':
             value = processing_value(value)
             lines.append(f"Property '{parent}{key}' was removed")
-    return lines
+    return '\n'.join(lines)

@@ -8,6 +8,7 @@ from gendiff.generate_json_file import python_to_json
 def generate_diff(file_path_1, file_path_2, format_name):
     file1, file2 = transform_to_dict(file_path_1, file_path_2)
     diff = construct_diff(file1, file2)
+    print(diff)
     if format_name == 'stylish':
         return generate_stylish_lines(diff)
     elif format_name == 'plain':
