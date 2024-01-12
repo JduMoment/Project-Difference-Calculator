@@ -1,5 +1,11 @@
-def make_dict(key, value, changes, value_2 = None):
-    if value_2 is not None:
+IN_FIRST = 'IN_FIRST'
+SAME = 'SAME'
+IN_SECOND = 'IN_SECOND'
+CHANGED = 'CHANGED'
+EMPTY = 'EMPTY'
+
+def make_dict(key, value, changes, value_2 = EMPTY):
+    if value_2 != EMPTY:
         return dict(
             key=key,
             old_value=value,
@@ -12,23 +18,12 @@ def make_dict(key, value, changes, value_2 = None):
         changes=changes,
     )
 
-IN_FIRST = 'IN_FIRST'
-SAME = 'SAME'
-IN_SECOND = 'IN_SECOND'
-CHANGED = 'CHANGED'
-EMPTY = 'EMPTY'
-
-
 def construct_diff(dict_1: dict, dict_2: dict) -> list:
     diff_list = []
     all_keys = sorted(set(dict_1.keys()) | set(dict_2.keys()))
     for key in all_keys:
         value_dict_1 = dict_1.get(key, EMPTY)
         value_dict_2 = dict_2.get(key, EMPTY)
-        if isinstance(value_dict_1, bool) or value_dict_1 is None:
-            value_dict_1 = str(value_dict_1).lower()
-        if isinstance(value_dict_2, bool) or value_dict_2 is None:
-            value_dict_2 = str(value_dict_2).lower()
         if key not in dict_2:
             diff_list.append(make_dict(key, value_dict_1, IN_FIRST))
         elif key not in dict_1:

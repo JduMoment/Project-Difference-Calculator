@@ -1,4 +1,10 @@
 def processing_value(value):
+    if value == None:
+        return 'null'
+    elif value is True:
+        return 'true'
+    elif value is False:
+        return 'false'
     if value == 'true' or value == 'false' or value == 'null':
         return value
     elif value is None:
