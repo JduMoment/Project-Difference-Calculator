@@ -1,25 +1,26 @@
+DEFAULT_DEPTH = 0
 DEPTH_STEP = 1
-NUM_OF_INDENTS = 4
+GAP = 4
 LEFT_SHIFT = 2
+
 
 def make_line(key, value, depth, diff):
     if value is None:
         value = 'null'
-    elif value is True:
-        value = 'true'
-    elif value is False:
-        value = 'false'
+    elif value is True or value is False:
+        value = str(value).lower()
     if isinstance(value, dict) or isinstance(value, list):
-        return f"{' ' * (depth * NUM_OF_INDENTS - LEFT_SHIFT)}{diff} {key}: " + '{'
+        return f"{' ' * (depth * GAP - LEFT_SHIFT)}{diff} {key}" + ': {'
     else:
-        return (f"{' ' * (depth * NUM_OF_INDENTS - LEFT_SHIFT)}{diff} {key}: {value}")
+        return f"{' ' * (depth * GAP - LEFT_SHIFT)}{diff} {key}: {value}"
 
 
-def generate_stylish_lines(diff_list, depth = DEPTH_STEP):
-    if diff_list is None:
-        return None
+def generate_stylish_lines(diff_list, depth=DEFAULT_DEPTH):
+    if diff_list is None or len(diff_list) == 0:
+        return ''
     lines = []
-    if depth == DEPTH_STEP:
+    if depth == DEFAULT_DEPTH:
+        depth += 1
         lines.append('{')
     if isinstance(diff_list, list):
         for every_dict in diff_list:
@@ -42,13 +43,17 @@ def generate_stylish_lines(diff_list, depth = DEPTH_STEP):
                     lines.append(result)
             elif every_dict['changes'] == 'CHANGED':
                 if 'old_value' in every_dict:
-                    lines.append(make_line(key, every_dict['old_value'], depth, '-'))
+                    lines.append(make_line(key, every_dict['old_value'],
+                                           depth, '-'))
                     if isinstance(every_dict['old_value'], dict):
-                        result = generate_stylish_lines(every_dict['old_value'], depth + DEPTH_STEP)
+                        result = generate_stylish_lines(every_dict['old_value'],
+                                                        depth + DEPTH_STEP)
                         lines.append(result)
-                    lines.append(make_line(key, every_dict['new_value'], depth, '+'))
+                    lines.append(make_line(key, every_dict['new_value'],
+                                           depth, '+'))
                     if isinstance(every_dict['new_value'], dict):
-                        result = generate_stylish_lines(every_dict['new_value'], depth + DEPTH_STEP)
+                        result = generate_stylish_lines(every_dict['new_value'],
+                                                        depth + DEPTH_STEP)
                         lines.append(result)
                 elif isinstance(value, list):
                     lines.append(f" {make_line(key, value, depth, '')}")
@@ -60,5 +65,6 @@ def generate_stylish_lines(diff_list, depth = DEPTH_STEP):
             if isinstance(v, dict):
                 result = generate_stylish_lines(v, depth + DEPTH_STEP)
                 lines.append(result)
-    lines.append(f"{' ' * depth}" + '}')
+    depth -= 1
+    lines.append(f"{' ' * (depth * GAP)}" + '}')
     return '\n'.join(lines)
