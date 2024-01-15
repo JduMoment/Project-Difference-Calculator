@@ -6,6 +6,8 @@ publish: #Публикуем пакет в PyPI, не добавляем в ка
 	poetry publish --dry-run
 package-install: #Устанавливаем пакет из ОС
 	python3 -m pip install --user dist/*.whl
+package-reinstall: #Переустановить пакет
+	python3 -m pip install --user dist/*.whl --force-reinstall
 lint: #Запускаем проверку линтером
 	poetry run flake8 gendiff
 gendiff: #Запускаем скрипт сравнения

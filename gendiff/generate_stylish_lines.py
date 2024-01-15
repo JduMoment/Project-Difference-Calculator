@@ -16,6 +16,8 @@ def make_line(key, value, depth, diff):
 
 
 def generate_stylish_lines(diff_list, depth = DEPTH_STEP):
+    if diff_list is None:
+        return None
     lines = []
     if depth == DEPTH_STEP:
         lines.append('{')
