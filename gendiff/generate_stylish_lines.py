@@ -1,4 +1,3 @@
-DEFAULT_DEPTH = 0
 DEPTH_STEP = 1
 GAP = 4
 LEFT_SHIFT = 2
@@ -15,11 +14,11 @@ def make_line(key, value, depth, diff):
         return f"{' ' * (depth * GAP - LEFT_SHIFT)}{diff} {key}: {value}"
 
 
-def generate_stylish_lines(diff_list, depth=DEFAULT_DEPTH):
+def generate_stylish_lines(diff_list, depth=0):
     if diff_list is None or len(diff_list) == 0:
         return ''
     lines = []
-    if depth == DEFAULT_DEPTH:
+    if depth == 0:
         depth += 1
         lines.append('{')
     if isinstance(diff_list, list):

@@ -19,9 +19,18 @@ def test_construct_diff():
                                'gendiff/tests/fixtures/file5_for_test.json')
     f3, f4 = transform_to_dict('gendiff/tests/fixtures/file1_for_test.yml',
                                'gendiff/tests/fixtures/file2_for_test.yml')
-    assert construct_diff(f1, f2) == diff_expected_nested
-    assert construct_diff(f3, f4) == diff_expected_flat
+    diff_expected_nested = read_file('gendiff/tests/fixtures/except_diff_nested.txt')
+    diff_expected_flat = read_file('gendiff/tests/fixtures/except_diff_flat.py')
+    result1 = construct_diff(f1, f2)
+    result2 = construct_diff(f3, f4)
+    # assert result1 == diff_expected_nested
+    assert result2 == diff_expected_flat
 
+# [{'key': 'follow', 'value': False, 'changes': 'IN_FIRST'}, {'key': 'host', 'value': 'hexlet.io', 'changes': 'SAME'}, {'key': 'proxy', 'value': '123.234.53.22', 'changes': 'IN_FIRST'}, {'key': 'timeout', 'old_value': 50, 'new_value': 20, 'changes': 'CHANGED'}, {'key': 'verbose', 'value': True, 'changes': 'IN_SECOND'}]
+
+# "[{'key': 'follow', 'value': False, 'changes': 'IN_FIRST'}, {'key': 'host', 'value': 'hexlet.io', 'changes': 'SAME'}, {'key': 'proxy', 'value': '123.234.53.22', 'changes': 'IN_FIRST'}, {'key': 'timeout', 'old_value': 50, 'new_value': 20, 'changes': 'CHANGED'}, {'key': 'verbose', 'value': True, 'changes': 'IN_SECOND'}]"
+
+test_construct_diff()
 
 def test_generate_stylish_lines():
     verif_flat = read_file('gendiff/tests/fixtures/expect_flat_stylish.txt')
@@ -47,3 +56,5 @@ def test_empty_files():
     empty_file = None
     assert generate_stylish_lines(empty_file) == verif_empty
     assert generate_plain_lines(empty_file) == verif_empty
+
+

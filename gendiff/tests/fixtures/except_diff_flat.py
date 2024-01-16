@@ -1,0 +1,1 @@
+[{'key': 'follow', 'value': False, 'changes': 'IN_FIRST'}, {'key': 'host', 'value': 'hexlet.io', 'changes': 'SAME'}, {'key': 'proxy', 'value': '123.234.53.22', 'changes': 'IN_FIRST'}, {'key': 'timeout', 'old_value': 50, 'new_value': 20, 'changes': 'CHANGED'}, {'key': 'verbose', 'value': True, 'changes': 'IN_SECOND'}]
