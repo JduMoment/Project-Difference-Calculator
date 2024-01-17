@@ -117,16 +117,15 @@ def generate_stylish_lines(diff_tree, depth=0):
             lines.append(f"{shift}  {key}: ")
             result = generate_stylish_lines(child.get('value'), depth + DEPTH_STEP)
             lines.append(result)
-        else:
-            if change == 'IN_SECOND':
-                lines.append(f"{shift}- {key}: {new_value}")
-            elif change == 'IN_FIRST':
-                lines.append(f"{shift}+ {key}: {old_value}")
-            elif change == 'CHANGED':
-                lines.append(f"{shift}- {key}: {old_value}")
-                lines.append(f"{shift}+ {key}: {new_value}")
-            elif change == 'SAME':
-                lines.append(f"{shift}  {key}: {new_value}")
+        if change == 'IN_SECOND':
+            lines.append(f"{shift}- {key}: {new_value}")
+        elif change == 'IN_FIRST':
+            lines.append(f"{shift}+ {key}: {old_value}")
+        elif change == 'CHANGED':
+            lines.append(f"{shift}- {key}: {old_value}")
+            lines.append(f"{shift}+ {key}: {new_value}")
+        elif change == 'SAME':
+            lines.append(f"{shift}  {key}: {new_value}")
     return '\n'.join(lines)
 
 

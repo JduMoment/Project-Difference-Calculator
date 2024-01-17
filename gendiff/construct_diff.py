@@ -19,7 +19,6 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
                 key=key,
                 old_value=value_data_1,
                 new_value=EMPTY,
-                type='leaf',
                 change=IN_FIRST,
             ))
         elif key not in data_1:
@@ -27,7 +26,6 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
                 key=key,
                 old_value=EMPTY,
                 new_value=value_data_2,
-                type='leaf',
                 change=IN_SECOND,
             ))
         elif value_data_1 == value_data_2:
@@ -35,7 +33,6 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
                 key=key,
                 old_value=value_data_1,
                 new_value=value_data_2,
-                type='leaf',
                 change=SAME,
             ))
         elif isinstance(value_data_1, dict) and isinstance(value_data_2, dict):
@@ -43,7 +40,6 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
             diff.append(dict(
                 key=key,
                 value=construct,
-                type='leaf',
                 change=NESTED,
             ))
         else:
@@ -51,7 +47,6 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
                 key=key,
                 old_value=value_data_1,
                 new_value=value_data_2,
-                type='leaf',
                 change=CHANGED,
             ))
     return diff
