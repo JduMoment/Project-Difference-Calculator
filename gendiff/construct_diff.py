@@ -1,38 +1,34 @@
 from typing import Dict, List
 
-IN_FIRST = 'IN_FIRST'
+DELETED = 'DELETED'
 SAME = 'SAME'
-IN_SECOND = 'IN_SECOND'
+ADDED = 'ADDED'
 CHANGED = 'CHANGED'
 NESTED = 'NESTED'
-EMPTY = 'EMPTY'
 
 
 def construct_diff(data_1: Dict, data_2: Dict) -> List:
     diff = []
     all_keys = sorted(set(data_1.keys()) | set(data_2.keys()))
     for key in all_keys:
-        value_data_1 = data_1.get(key, EMPTY)
-        value_data_2 = data_2.get(key, EMPTY)
+        value_data_1 = data_1.get(key, 'EMPTY')
+        value_data_2 = data_2.get(key, 'EMPTY')
         if key not in data_2:
             diff.append(dict(
                 key=key,
-                old_value=value_data_1,
-                new_value=EMPTY,
-                change=IN_FIRST,
+                value=value_data_1,
+                node_type=DELETED,
             ))
         elif key not in data_1:
             diff.append(dict(
                 key=key,
-                old_value=EMPTY,
                 new_value=value_data_2,
-                change=IN_SECOND,
+                change=ADDED,
             ))
         elif value_data_1 == value_data_2:
             diff.append(dict(
                 key=key,
                 old_value=value_data_1,
-                new_value=value_data_2,
                 change=SAME,
             ))
         elif isinstance(value_data_1, dict) and isinstance(value_data_2, dict):
