@@ -6,35 +6,24 @@ dfflst = {'type': 'root',
  'children': [{'key': 'common',
                'value': {'type': 'root',
                          'children': [{'key': 'follow',
-                                       'old_value': 'EMPTY',
-                                       'new_value': False,
-                                       'type': 'leaf',
-                                       'change': 'IN_SECOND'},
+                                       'value': False,
+                                       'node_type': 'ADDED'},
                                       {'key': 'setting1',
-                                       'old_value': 'Value 1',
-                                       'new_value': 'Value 1',
-                                       'type': 'leaf',
-                                       'change': 'SAME'},
+                                       'value': 'Value 1',
+                                       'node_type': 'SAME'},
                                       {'key': 'setting2',
-                                       'old_value': 200,
-                                       'new_value': 'EMPTY',
-                                       'type': 'leaf',
-                                       'change': 'IN_FIRST'},
+                                       'value': 200,
+                                       'node_type': 'DELETED'},
                                       {'key': 'setting3',
                                        'old_value': True,
                                        'new_value': None,
-                                       'type': 'leaf',
-                                       'change': 'CHANGED'},
+                                       'node_type': 'CHANGED'},
                                       {'key': 'setting4',
-                                       'old_value': 'EMPTY',
-                                       'new_value': 'blah blah',
-                                       'type': 'leaf',
-                                       'change': 'IN_SECOND'},
+                                       'value': 'blah blah',
+                                       'node_type': 'ADDED'},
                                       {'key': 'setting5',
-                                       'old_value': 'EMPTY',
-                                       'new_value': {'key5': 'value5'},
-                                       'type': 'leaf',
-                                       'change': 'IN_SECOND'},
+                                       'value': {'key5': 'value5'},
+                                       'node_type': 'ADDED'},
                                       {'key': 'setting6',
                                        'value': {'type': 'root',
                                                  'children': [{'key': 'doge',
@@ -43,145 +32,82 @@ dfflst = {'type': 'root',
                                                                                        'old_value': '',
                                                                                        'new_value': 'so '
                                                                                                     'much',
-                                                                                       'type': 'leaf',
-                                                                                       'change': 'CHANGED'}]},
-                                                               'type': 'leaf',
-                                                               'change': 'NESTED'},
+                                                                                       'node_type': 'CHANGED'}]},
+                                                               'node_type': 'NESTED'},
                                                               {'key': 'key',
-                                                               'old_value': 'value',
-                                                               'new_value': 'value',
-                                                               'type': 'leaf',
-                                                               'change': 'SAME'},
+                                                               'value': 'value',
+                                                               'node_type': 'SAME'},
                                                               {'key': 'ops',
-                                                               'old_value': 'EMPTY',
-                                                               'new_value': 'vops',
-                                                               'type': 'leaf',
-                                                               'change': 'IN_SECOND'}]},
-                                       'type': 'leaf',
-                                       'change': 'NESTED'}]},
-               'type': 'leaf',
-               'change': 'NESTED'},
+                                                               'value': 'vops',
+                                                               'node_type': 'ADDED'}]},
+                                       'node_type': 'NESTED'}]},
+               'node_type': 'NESTED'},
               {'key': 'group1',
                'value': {'type': 'root',
                          'children': [{'key': 'baz',
                                        'old_value': 'bas',
                                        'new_value': 'bars',
-                                       'type': 'leaf',
-                                       'change': 'CHANGED'},
+                                       'node_type': 'CHANGED'},
                                       {'key': 'foo',
-                                       'old_value': 'bar',
-                                       'new_value': 'bar',
-                                       'type': 'leaf',
-                                       'change': 'SAME'},
+                                       'value': 'bar',
+                                       'node_type': 'SAME'},
                                       {'key': 'nest',
                                        'old_value': {'key': 'value'},
                                        'new_value': 'str',
-                                       'type': 'leaf',
-                                       'change': 'CHANGED'}]},
-               'type': 'leaf',
-               'change': 'NESTED'},
+                                       'node_type': 'CHANGED'}]},
+               'node_type': 'NESTED'},
               {'key': 'group2',
-               'old_value': {'abc': 12345, 'deep': {'id': 45}},
-               'new_value': 'EMPTY',
-               'type': 'leaf',
-               'change': 'IN_FIRST'},
+               'value': {'abc': 12345, 'deep': {'id': 45}},
+               'node_type': 'DELETED'},
               {'key': 'group3',
-               'old_value': 'EMPTY',
-               'new_value': {'deep': {'id': {'number': 45}}, 'fee': 100500},
-               'type': 'leaf',
-               'change': 'IN_SECOND'}]}
+               'value': {'deep': {'id': {'number': 45}}, 'fee': 100500},
+               'node_type': 'ADDED'}]}
 
-# def make_line(key, old_value, new_value, change, depth, diff):
-#     if value is None:
-#         value = 'null'
-#     elif value is True or value is False:
-#         value = str(value).lower()
-#     if isinstance(value, dict) or isinstance(value, list):
-#         return f"{' ' * (depth * GAP - LEFT_SHIFT)}{diff} {key}" + ': {'
-#     else:
-#         return f"{' ' * (depth * GAP - LEFT_SHIFT)}{diff} {key}: {value}"
+
+def make_string(key, value, depth, diff=' '):
+    if isinstance(value, bool):
+        value = str(value).lower()
+    elif value is None:
+        value = 'null'
+    lines = []
+    shift = f"{' ' * (depth * GAP - LEFT_SHIFT)}"
+    if isinstance(value, dict):
+        lines.append(f"{shift}{diff} {key}: " + '{')
+        for k, v in value.items():
+            result = make_string(k, v, depth + DEPTH_STEP)
+            lines.append(result)
+        lines.append(f"{shift}  " + '}')
+    else:
+        lines.append(f"{shift}{diff} {key}: {value}")
+    return '\n'.join(lines)
 
 
 def generate_stylish_lines(diff_tree, depth=0):
     if diff_tree is None or len(diff_tree) == 0:
         return ''
     lines = []
-    shift = f"{' ' * (depth * GAP - LEFT_SHIFT)}"
-    childrens = diff_tree['children']
-    for child in childrens:
+    children = diff_tree['children']
+    for child in children:
         key = child.get('key')
-        old_value = child.get('old_value')
-        new_value = child.get('new_value')
-        change = child.get('change')
-        if child.get('value', None) is not None:
-            lines.append(f"{shift}  {key}: ")
-            result = generate_stylish_lines(child.get('value'), depth + DEPTH_STEP)
+        value = child.get('value')
+        node_type = child.get('node_type')
+        if node_type == 'NESTED':
+            lines.append(f"{' ' * ((depth + 1) * GAP - LEFT_SHIFT)}  {key}: " + '{')
+            result = generate_stylish_lines(child.get('value'), depth + 1)
             lines.append(result)
-        if change == 'IN_SECOND':
-            lines.append(f"{shift}- {key}: {new_value}")
-        elif change == 'IN_FIRST':
-            lines.append(f"{shift}+ {key}: {old_value}")
-        elif change == 'CHANGED':
-            lines.append(f"{shift}- {key}: {old_value}")
-            lines.append(f"{shift}+ {key}: {new_value}")
-        elif change == 'SAME':
-            lines.append(f"{shift}  {key}: {new_value}")
+        elif node_type == 'DELETED':
+            lines.append(make_string(key, value, depth + 1, '-'))
+        elif node_type == 'ADDED':
+            lines.append(make_string(key, value, depth + 1, '+'))
+        elif node_type == 'CHANGED':
+            lines.append(make_string(key, child.get('old_value'), depth + 1, '-'))
+            lines.append(make_string(key, child.get('new_value'), depth + 1, '+'))
+        else:
+            lines.append(make_string(key, value, depth + 1))
+    lines.append(f"{' ' * (depth * GAP - LEFT_SHIFT)}  " + '}')
     return '\n'.join(lines)
 
 
 print(generate_stylish_lines(dfflst))
 
 
-# def generate_stylish_lines(diff_list, depth=0):
-#     if diff_list is None or len(diff_list) == 0:
-#         return ''
-#     lines = []
-#     if depth == 0:
-#         depth += 1
-#         lines.append('{')
-#     if isinstance(diff_list, list):
-#         for every_dict in diff_list:
-#             key = every_dict['key']
-#             value = every_dict.get('value')
-#             if every_dict['changes'] == 'IN_FIRST':
-#                 lines.append(make_line(key, value, depth, '-'))
-#                 if isinstance(value, dict):
-#                     result = generate_stylish_lines(value, depth + DEPTH_STEP)
-#                     lines.append(result)
-#             elif every_dict['changes'] == 'IN_SECOND':
-#                 lines.append(make_line(key, value, depth, '+'))
-#                 if isinstance(value, dict):
-#                     result = generate_stylish_lines(value, depth + DEPTH_STEP)
-#                     lines.append(result)
-#             elif every_dict['changes'] == 'SAME':
-#                 lines.append(make_line(key, value, depth, ' '))
-#                 if isinstance(value, dict):
-#                     result = generate_stylish_lines(value, depth + DEPTH_STEP)
-#                     lines.append(result)
-#             elif every_dict['changes'] == 'CHANGED':
-#                 if 'old_value' in every_dict:
-#                     lines.append(make_line(key, every_dict['old_value'],
-#                                            depth, '-'))
-#                     if isinstance(every_dict['old_value'], dict):
-#                         result = generate_stylish_lines(every_dict['old_value'],
-#                                                         depth + DEPTH_STEP)
-#                         lines.append(result)
-#                     lines.append(make_line(key, every_dict['new_value'],
-#                                            depth, '+'))
-#                     if isinstance(every_dict['new_value'], dict):
-#                         result = generate_stylish_lines(every_dict['new_value'],
-#                                                         depth + DEPTH_STEP)
-#                         lines.append(result)
-#                 elif isinstance(value, list):
-#                     lines.append(f" {make_line(key, value, depth, '')}")
-#                     result = generate_stylish_lines(value, depth + DEPTH_STEP)
-#                     lines.append(result)
-#     elif isinstance(diff_list, dict):
-#         for k, v in diff_list.items():
-#             lines.append(f" {make_line(k, v, depth, '')}")
-#             if isinstance(v, dict):
-#                 result = generate_stylish_lines(v, depth + DEPTH_STEP)
-#                 lines.append(result)
-#     depth -= 1
-#     lines.append(f"{' ' * (depth * GAP)}" + '}')
-#     return '\n'.join(lines)

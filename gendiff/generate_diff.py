@@ -9,9 +9,9 @@ def generate_diff(file_path_1, file_path_2, format_name):
     file1, file2 = transform_to_dict(file_path_1, file_path_2)
     diff = build_diff(file1, file2)
     return diff
-    if format_name == 'stylish':
-        return generate_stylish_lines(diff)
-    elif format_name == 'plain':
-        return generate_plain_lines(diff)
-    elif format_name == 'json':
-        return python_to_json(diff)
+    # if format_name == 'stylish':
+    #     return generate_stylish_lines(diff)
+    # elif format_name == 'plain':
+    #     return generate_plain_lines(diff)
+    # elif format_name == 'json':
+    #     return python_to_json(diff)
