@@ -8,32 +8,33 @@ def processing_value(value):
     return f"'{value}'"
 
 
-def generate_plain_lines(diff_list, parent=''):
-    if diff_list is None or len(diff_list) == 0:
-        return ''
-    lines = []
-    for every_dict in diff_list:
-        key = every_dict['key']
-        value = every_dict.get('value')
-        changes = every_dict['changes']
-        if changes == 'CHANGED':
-            if isinstance(value, list):
-                result = generate_plain_lines(value, parent + f"{key}.")
+def generate_plain_lines(diff_tree, parent=''):
+    key = diff_tree.get('key')
+    value = diff_tree.get('value')
+    node_type = diff_tree.get('node_type')
+    if node_type == 'root':
+        children = diff_tree['children']
+        lines = []
+        for child in children:
+            result = generate_plain_lines(child)
+            lines.append(result)
+        return '\n'.join(lines)
+    elif node_type == 'NESTED':
+        children = diff_tree['children']
+        lines = []
+        for child in children:
+            result = generate_plain_lines(child, parent + f"{key}.")
+            if result is not None:
                 lines.append(result)
-            else:
-                old_value = processing_value(every_dict['old_value'])
-                new_value = processing_value(every_dict['new_value'])
-                lines.append(f"Property '{parent}{key}' was updated. "
-                             f"From {old_value} to {new_value}")
-        elif changes == 'IN_SECOND':
-            value = processing_value(value)
-            if isinstance(value, dict):
-                lines.append(f"Property '{parent}{key}' was added with value: "
-                             f"[complex value]")
-            else:
-                lines.append(f"Property '{parent}{key}' was added with value: "
-                             f"{value}")
-        elif changes == 'IN_FIRST':
-            value = processing_value(value)
-            lines.append(f"Property '{parent}{key}' was removed")
-    return '\n'.join(lines)
+        result = '\n'.join(lines)
+        return result
+    elif node_type == 'ADDED':
+        value = processing_value(value)
+        return f"Property {parent}{key} was added with value: {value}"
+    elif node_type == 'DELETED':
+        return f"Property {parent}{key} was removed"
+    elif node_type == 'CHANGED':
+        old_value = processing_value(diff_tree.get('old_value'))
+        new_value = processing_value(diff_tree.get('new_value'))
+        return f"Property {parent}{key} was updated."\
+               f" From {old_value} to {new_value}"

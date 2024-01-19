@@ -32,10 +32,10 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
                 node_type=SAME,
             ))
         elif isinstance(value_data_1, dict) and isinstance(value_data_2, dict):
-            construct = build_diff(value_data_1, value_data_2)
+            children = construct_diff(value_data_1, value_data_2)
             diff.append(dict(
                 key=key,
-                value=construct,
+                children=children,
                 node_type=NESTED,
             ))
         else:
@@ -50,6 +50,6 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
 
 def build_diff(data_1, data_2):
     return dict(
-        type='root',
+        node_type='root',
         children=construct_diff(data_1, data_2),
     )
