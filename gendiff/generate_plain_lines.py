@@ -6,7 +6,7 @@ def processing_value(value):
     elif isinstance(value, dict):
         return '[complex value]'
     elif isinstance(value, int):
-        return  f"{value}"
+        return f"{value}"
     return f"'{value}'"
 
 
