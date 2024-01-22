@@ -5,6 +5,8 @@ def processing_value(value):
         return str(value).lower()
     elif isinstance(value, dict):
         return '[complex value]'
+    elif isinstance(value, int):
+        return  f"{value}"
     return f"'{value}'"
 
 
