@@ -52,6 +52,3 @@ def generate_stylish_lines(diff_tree, depth=0):
                f"{make_string(key, diff_tree.get('new_value'), depth, '+')}"
     else:
         return f"{make_string(key, value, depth)}"
-
-
-

@@ -17,7 +17,8 @@ def generate_plain_lines(diff_tree, parent=''):
         lines = []
         for child in children:
             result = generate_plain_lines(child)
-            lines.append(result)
+            if result is not None:
+                lines.append(result)
         return '\n'.join(lines)
     elif node_type == 'NESTED':
         children = diff_tree['children']
@@ -30,11 +31,11 @@ def generate_plain_lines(diff_tree, parent=''):
         return result
     elif node_type == 'ADDED':
         value = processing_value(value)
-        return f"Property {parent}{key} was added with value: {value}"
+        return f"Property '{parent}{key}' was added with value: {value}"
     elif node_type == 'DELETED':
-        return f"Property {parent}{key} was removed"
+        return f"Property '{parent}{key}' was removed"
     elif node_type == 'CHANGED':
         old_value = processing_value(diff_tree.get('old_value'))
         new_value = processing_value(diff_tree.get('new_value'))
-        return f"Property {parent}{key} was updated."\
+        return f"Property '{parent}{key}' was updated."\
                f" From {old_value} to {new_value}"
