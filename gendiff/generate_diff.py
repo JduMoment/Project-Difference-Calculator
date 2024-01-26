@@ -1,8 +1,8 @@
 from gendiff.file_to_dict import transform_to_dict
 from gendiff.construct_diff import build_diff
-from gendiff.generate_stylish_lines import generate_stylish_lines
-from gendiff.generate_plain_lines import generate_plain_lines
-from gendiff.generate_json_file import python_to_json
+from gendiff.formatets.generate_stylish_lines import generate_stylish_lines
+from gendiff.formatets.generate_plain_lines import generate_plain_lines
+from gendiff.formatets.generate_json_file import python_to_json
 
 
 def generate_diff(file_path_1, file_path_2, format_name='stylish'):

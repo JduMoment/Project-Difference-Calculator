@@ -38,7 +38,7 @@ def generate_stylish_lines(diff_tree, depth=0):
         children = diff_tree['children']
         lines = []
         for child in children:
-            result = generate_stylish_lines(child, depth + 1)
+            result = generate_stylish_lines(child, depth + DEPTH_STEP)
             lines.append(result)
         result = '\n'.join(lines)
         return f"{' ' * (depth * GAP)}{key}: " + '{\n'\

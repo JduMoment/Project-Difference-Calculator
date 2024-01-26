@@ -1,10 +1,13 @@
 from typing import Dict, List
+from enum import Enum
 
-DELETED = 'DELETED'
-SAME = 'SAME'
-ADDED = 'ADDED'
-CHANGED = 'CHANGED'
-NESTED = 'NESTED'
+
+class NodeType(Enum):
+    deleted = 'DELETED'
+    same = 'SAME'
+    added = 'ADDED'
+    changed = 'CHANGED'
+    nested = 'NESTED'
 
 
 def construct_diff(data_1: Dict, data_2: Dict) -> List:
@@ -17,33 +20,33 @@ def construct_diff(data_1: Dict, data_2: Dict) -> List:
             diff.append(dict(
                 key=key,
                 value=value_data_1,
-                node_type=DELETED,
+                node_type=NodeType.deleted.value,
             ))
         elif key not in data_1:
             diff.append(dict(
                 key=key,
                 value=value_data_2,
-                node_type=ADDED,
+                node_type=NodeType.added.value,
             ))
         elif value_data_1 == value_data_2:
             diff.append(dict(
                 key=key,
                 value=value_data_1,
-                node_type=SAME,
+                node_type=NodeType.same.value,
             ))
         elif isinstance(value_data_1, dict) and isinstance(value_data_2, dict):
             children = construct_diff(value_data_1, value_data_2)
             diff.append(dict(
                 key=key,
                 children=children,
-                node_type=NESTED,
+                node_type=NodeType.nested.value,
             ))
         else:
             diff.append(dict(
                 key=key,
                 old_value=value_data_1,
                 new_value=value_data_2,
-                node_type=CHANGED,
+                node_type=NodeType.changed.value,
             ))
     return diff
 

@@ -13,13 +13,13 @@ For example, if you want output in plain format, you would enter the command:
 `gendiff -f plain path_to_file path_to_file`
 
 This asciinema demonstrates the generation of file differences in stylish format:
-https://asciinema.org/a/jwND5N0rzuYSjQV4ctsqQzuvJ
+[![asciicast](https://asciinema.org/a/jwND5N0rzuYSjQV4ctsqQzuvJ.svg)](https://asciinema.org/a/jwND5N0rzuYSjQV4ctsqQzuvJ)
 
 Demonstrates the generation of file differences in plain format:
-https://asciinema.org/a/ZOrXP49O22hlWEJnU7IRMPPGr
+[![asciicast](https://asciinema.org/a/ZOrXP49O22hlWEJnU7IRMPPGr.svg)](https://asciinema.org/a/ZOrXP49O22hlWEJnU7IRMPPGr)
 
 Demonstrates the generation of file differences in json format:
-https://asciinema.org/a/nIibIo8eBiYXslA9JjcLFqppH <br>
+[![asciicast](https://asciinema.org/a/nIibIo8eBiYXslA9JjcLFqppH.svg)](https://asciinema.org/a/nIibIo8eBiYXslA9JjcLFqppH)<br>
 
 For write to a file, just specify the path to the file: `gendiff -f json path_to_file
 path_to_file > file_for_writing`. The output has already been converted to the json format.
