@@ -16,3 +16,4 @@ def test_generate_stylish_lines():
     verif_plain = read_file((os.path.join(os.path.dirname(__file__), 'fixtures', 'expect_plain.txt')))
     assert result_stylish == verif_stylish
     assert result_plain == verif_plain
+

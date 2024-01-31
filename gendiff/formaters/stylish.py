@@ -3,13 +3,17 @@ GAP = 4
 LEFT_SHIFT = 2
 
 
+def calc_shift(depth, left_shift=0):
+    return f"{' ' * (depth * GAP - left_shift)}"
+
+
 def make_string(key, value, depth, diff=' '):
     if isinstance(value, bool):
         value = str(value).lower()
     elif value is None:
         value = 'null'
     lines = []
-    shift = f"{' ' * (depth * GAP - LEFT_SHIFT)}"
+    shift = calc_shift(depth, LEFT_SHIFT)
     if isinstance(value, dict):
         lines.append(f"{shift}{diff} {key}: " + '{')
         for k, v in value.items():
@@ -29,20 +33,20 @@ def generate_stylish_lines(diff_tree, depth=0):
         children = diff_tree['children']
         lines = []
         lines.append('{')
-        for child in children:
-            result = generate_stylish_lines(child, depth + DEPTH_STEP)
-            lines.append(result)
-        lines.append('}')
-        return '\n'.join(lines)
+        lines = map(lambda child:
+                    generate_stylish_lines(child, depth + DEPTH_STEP),
+                    children)
+        result = "\n".join(lines)
+        return f'{{\n{result}\n}}'
     elif node_type == 'NESTED':
         children = diff_tree['children']
         lines = []
-        for child in children:
-            result = generate_stylish_lines(child, depth + DEPTH_STEP)
-            lines.append(result)
-        result = '\n'.join(lines)
-        return f"{' ' * (depth * GAP)}{key}: " + '{\n'\
-            f"{result}\n{' ' * (depth * GAP)}" + '}'
+        lines = map(lambda child:
+                    generate_stylish_lines(child, depth + DEPTH_STEP),
+                    children)
+        result = "\n".join(lines)
+        return f"{calc_shift(depth)}{key}: " + '{\n'\
+            f"{result}\n{calc_shift(depth)}" + '}'
     elif node_type == 'DELETED':
         return make_string(key, value, depth, '-')
     elif node_type == 'ADDED':
@@ -50,5 +54,6 @@ def generate_stylish_lines(diff_tree, depth=0):
     elif node_type == 'CHANGED':
         return f"{make_string(key, diff_tree.get('old_value'), depth, '-')}\n"\
                f"{make_string(key, diff_tree.get('new_value'), depth, '+')}"
-    else:
+    elif node_type == 'SAME':
         return f"{make_string(key, value, depth)}"
+    raise 'This type of node does not exist.'

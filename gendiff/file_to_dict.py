@@ -3,20 +3,15 @@ import json
 import os
 
 
-def open_file(file):
-    open_file = open(file)
-    return open_file
+def transform_to_dict(data, format_data):
+    if format_data == 'json':
+        return json.load(data)
+    elif format_data == 'yaml' or format_data == 'yml':
+        return yaml.load(data, Loader=yaml.FullLoader)
+    raise 'The file format is not supported.'
 
 
-def transform_to_dict(path_to_file1, path_to_file2):
-    _, format_file1 = os.path.splitext(path_to_file1)
-    _, format_file_2 = os.path.splitext(path_to_file2)
-    if format_file1 == '.json':
-        file1 = json.load(open_file(path_to_file1))
-    if format_file_2 == '.json':
-        file2 = json.load(open_file(path_to_file2))
-    if format_file1 == '.yaml' or format_file1 == '.yml':
-        file1 = yaml.load(open_file(path_to_file1), Loader=yaml.FullLoader)
-    if format_file_2 == '.yaml' or format_file_2 == '.yml':
-        file2 = yaml.load(open_file(path_to_file2), Loader=yaml.FullLoader)
-    return file1, file2
+def get_data(path_to_file):
+    _, format_file = os.path.splitext(path_to_file)
+    with open(path_to_file, 'r') as file:
+        return transform_to_dict(file, format_file[1:])
