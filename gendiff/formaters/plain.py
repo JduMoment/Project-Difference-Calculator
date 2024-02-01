@@ -1,3 +1,6 @@
+from gendiff.errors import NodeError
+
+
 def processing_value(value):
     if value is None:
         return 'null'
@@ -41,3 +44,7 @@ def generate_plain_lines(diff_tree, parent=''):
         new_value = processing_value(diff_tree.get('new_value'))
         return f"Property '{parent}{key}' was updated."\
                f" From {old_value} to {new_value}"
+    elif node_type == 'SAME':
+        pass
+    else:
+        raise NodeError('This type of node does not exist.')

@@ -1,3 +1,6 @@
+from gendiff.errors import NodeError
+
+
 DEPTH_STEP = 1
 GAP = 4
 LEFT_SHIFT = 2
@@ -56,4 +59,5 @@ def generate_stylish_lines(diff_tree, depth=0):
                f"{make_string(key, diff_tree.get('new_value'), depth, '+')}"
     elif node_type == 'SAME':
         return f"{make_string(key, value, depth)}"
-    raise 'This type of node does not exist.'
+    else:
+        raise NodeError('This type of node does not exist.')
