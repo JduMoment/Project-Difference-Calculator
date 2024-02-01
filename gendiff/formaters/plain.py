@@ -1,4 +1,4 @@
-from gendiff.errors import NodeError
+from gendiff.errors import NodeTypeError
 
 
 def processing_value(value):
@@ -47,4 +47,4 @@ def generate_plain_lines(diff_tree, parent=''):
     elif node_type == 'SAME':
         pass
     else:
-        raise NodeError('This type of node does not exist.')
+        raise NodeTypeError('This type of node does not exist.')
