@@ -47,4 +47,4 @@ def generate_plain_lines(diff_tree, parent=''):
     elif node_type == 'SAME':
         pass
     else:
-        raise NodeTypeError('This type of node does not exist.')
+        raise NodeTypeError(f"Unexpected node type: '{node_type}'")

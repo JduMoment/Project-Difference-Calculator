@@ -4,9 +4,9 @@ import os
 
 
 def transform_to_dict(data, format_data):
-    if format_data == 'json':
+    if format_data.lower() == 'json':
         return json.load(data)
-    elif format_data == 'yaml' or format_data == 'yml':
+    elif format_data.lower() in ['yaml', 'yml']:
         return yaml.load(data, Loader=yaml.FullLoader)
     raise TypeError('The file format is not supported.')
 

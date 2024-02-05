@@ -34,30 +34,29 @@ def generate_stylish_lines(diff_tree, depth=0):
     node_type = diff_tree.get('node_type')
     if node_type == 'root':
         children = diff_tree['children']
-        lines = []
-        lines.append('{')
         lines = map(lambda child:
                     generate_stylish_lines(child, depth + DEPTH_STEP),
                     children)
         result = "\n".join(lines)
-        return f'{{\n{result}\n}}'
+        return f"{{\n{result}\n}}"
     elif node_type == 'NESTED':
         children = diff_tree['children']
-        lines = []
         lines = map(lambda child:
                     generate_stylish_lines(child, depth + DEPTH_STEP),
                     children)
         result = "\n".join(lines)
-        return f"{calc_shift(depth)}{key}: " + '{\n'\
-            f"{result}\n{calc_shift(depth)}" + '}'
+        shift = calc_shift(depth)
+        return f'{shift}{key}: {{\n{result}\n{shift}}}'
     elif node_type == 'DELETED':
         return make_string(key, value, depth, '-')
     elif node_type == 'ADDED':
         return make_string(key, value, depth, '+')
     elif node_type == 'CHANGED':
-        return f"{make_string(key, diff_tree.get('old_value'), depth, '-')}\n"\
-               f"{make_string(key, diff_tree.get('new_value'), depth, '+')}"
+        old_value = diff_tree.get('old_value')
+        new_value = diff_tree.get('new_value')
+        return f"{make_string(key, old_value, depth, '-')}\n"\
+               f"{make_string(key, new_value, depth, '+')}"
     elif node_type == 'SAME':
         return f"{make_string(key, value, depth)}"
     else:
-        raise NodeTypeError('This type of node does not exist.')
+        raise NodeTypeError(f"Unexpected node type: '{node_type}'")
