@@ -4,23 +4,28 @@ version = "0.1.0"
 description = "The program detects differences in files."
 authors = ["Kuragin Ivan <curagin.vanya@yandex.ru>"]
 readme = "README.md"
+classifiers = [
+	"Topic :: File Formats",
+	"Programming Language :: Python :: 3.10",
+	"Development Status :: 5 - Production/Stable"
+]
 repository = "https://github.com/JduMoment/python-project-50"
 packages = [
     { include = "gendiff" },
 ]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-flake8 = "^6.1.0"
-pytest-cov = "^4.1.0"
-pyyaml = "^6.0.1"
-pytest = "^8.0.0"
-
 [tool.poetry.scripts]
 gendiff = "gendiff.scripts.gen_diff:main"
-adasds
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytest-cov = "^4.1.0"
+pyyaml = "^6.0.1"
+pytest = "^7.4.3"
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
+flake8 = "^6.1.0"
 
 [build-system]
 requires = ["poetry-core"]
