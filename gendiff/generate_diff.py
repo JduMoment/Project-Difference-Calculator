@@ -8,4 +8,3 @@ def generate_diff(file_path_1, file_path_2, format_name='stylish'):
     file2 = get_data(file_path_2)
     diff = build_diff(file1, file2)
     return define_formatter(diff, format_name)
-
