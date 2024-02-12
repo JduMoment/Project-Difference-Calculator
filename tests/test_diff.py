@@ -1,7 +1,8 @@
 import pytest
+import os
 
 from gendiff.generate_diff import generate_diff
-import os
+from gendiff.errors import FormatError
 
 
 def read_file(path_to_expected_file):
@@ -32,7 +33,7 @@ def test_formatters(first_file, second_file, formatter, res):
 
 
 def test_unknown_format():
-    with pytest.raises(TypeError) as exc_info:
+    with pytest.raises(FormatError) as exc_info:
         generate_diff((os.path.join(os.path.dirname(__file__), 'fixtures', 'unknown_file.txt')),
                       (os.path.join(os.path.dirname(__file__), 'fixtures', 'unknown_file.txt')))
     assert exc_info.value.args[0] == 'The file format is not supported.'

@@ -6,3 +6,8 @@ class NodeTypeError(Exception):
 class FormatterError(Exception):
     """Throw when selected formatter absent"""
     pass
+
+
+class FormatError(Exception):
+    """Thrown when the file format is not supported."""
+    pass

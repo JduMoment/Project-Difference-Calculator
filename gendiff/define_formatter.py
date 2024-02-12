@@ -1,7 +1,7 @@
 from gendiff.errors import FormatterError
-from .stylish import generate_stylish_lines
-from .plain import generate_plain_lines
-from .to_json import python_to_json
+from gendiff.formatters.stylish import generate_stylish_lines
+from gendiff.formatters.plain import generate_plain_lines
+from gendiff.formatters.to_json import python_to_json
 
 
 def define_formatter(diff_tree, format_name):
